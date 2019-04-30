@@ -48,16 +48,24 @@ class Main extends Component{
   }
 
   handleShowNewPostForm(){
-    this.setState({showNewPostForm: true});
+    console.log(this.state.showNewPostForm);
+    this.setState((prevState) => {return {showNewPostForm:        !prevState.showNewPostForm}
+    });
   }
 
   render(){
     var mainStyle={
       //padding: '0 20% 0 20%'
     }
-    let newPostSection = <AddPost onNewPostCreation={this.handleNewPostCreation}/>;
+    var buttonStyle={
+      padding: '10px',
+      margin: '10px'
+    }
+
+    let newPostSection = <AddPost onNewPostCreation={this.handleNewPostCreation}
+    onCancelNewPost={this.handleShowNewPostForm}/>;
     if (this.state.showNewPostForm == false)
-      newPostSection = <button onClick={this.handleShowNewPostForm}>New post</button>;
+      newPostSection = <button style={buttonStyle} onClick={this.handleShowNewPostForm}>New post</button>;
 
     return(
       <div style={mainStyle}>
