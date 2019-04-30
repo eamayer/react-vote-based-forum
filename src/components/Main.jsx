@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { v4 } from 'uuid';
 import image1 from '../assets/images/image1.jpg';
 import image2 from '../assets/images/image2.jpg';
+import image3 from '../assets/images/image3.jpg';
 import Post from './Post';
 import AddPost from './AddPost';
 
@@ -11,7 +12,8 @@ class Main extends Component{
     this.state = {
       masterPosts: [
         {topic: "I work at a cat shelter. These are the “can we keep him?” photos I sent to my partner. It worked.", votes: 10, image: image1, id: v4()},
-        {topic: "Little Kitten I found outside on a rainy day. (approx 1 month old)", votes: 15, image: image2, id: v4()}
+        {topic: "Little Kitten I found outside on a rainy day. (approx 1 month old)", votes: 15, image: image2, id: v4()},
+        {topic: "Best pose ever", votes: 20, image: image3, id: v4()},
       ],
       showNewPostForm: false
     };
@@ -53,6 +55,16 @@ class Main extends Component{
     });
   }
 
+  compare(a, b){
+    if (a.votes > b.votes){
+      return -1;
+    }
+    if (a.votes < b.votes){
+      return 1;
+    }
+    return 0;
+  }
+
   render(){
     var mainStyle={
       //padding: '0 20% 0 20%'
@@ -64,15 +76,21 @@ class Main extends Component{
 
     let newPostSection = <AddPost onNewPostCreation={this.handleNewPostCreation}
     onCancelNewPost={this.handleShowNewPostForm}/>;
+
     if (this.state.showNewPostForm == false)
       newPostSection = <button style={buttonStyle} onClick={this.handleShowNewPostForm}>New post</button>;
 
+    let sortedPosts = this.state.masterPosts;
+    sortedPosts.sort(this.compare);
+
+    // {this.state.masterPosts.map((newPost) =>
+    //   <Post post={newPost} key={newPost.id} onVote={this.handleVote}/>
+    // )}
     return(
       <div style={mainStyle}>
         {newPostSection}
-        {this.state.masterPosts.map((newPost) =>
-          <Post post={newPost} key={newPost.id} onVote={this.handleVote}/>
-        )}
+        {sortedPosts.map((newPost) =>
+          <Post post={newPost} key={newPost.id} onVote={this.handleVote}/>)}
       </div>
     );
   }
